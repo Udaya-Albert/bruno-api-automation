@@ -1,0 +1,51 @@
+info:
+  name: Update Booking lifecycle
+  type: http
+  seq: 2
+
+http:
+  method: PUT
+  url: "{{baseUrl}}/booking/{{bookingId}}"
+  headers:
+    - name: Cookie
+      value: token={{token}}
+    - name: Content-Type
+      value: application/json
+    - name: Accept
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "firstname": "Udaya",
+        "lastname": "Updated",
+        "totalprice": 750,
+        "depositpaid": false,
+        "bookingdates": {
+          "checkin": "2026-10-05",
+          "checkout": "2026-10-15"
+        },
+        "additionalneeds": "Lunch"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Updated booking values are correct", function() {
+          const body = res.getBody();
+
+          expect(body.totalprice).to.equal(750);
+          expect(body.depositpaid).to.equal(false);
+          expect(body.firstname).to.equal("Udaya");
+        expect(body.lastname).to.equal("Updated");
+        expect(body.additionalneeds).to.equal("Lunch");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

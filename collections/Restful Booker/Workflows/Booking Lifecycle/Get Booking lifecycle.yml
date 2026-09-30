@@ -1,0 +1,57 @@
+info:
+  name: Get Booking lifecycle
+  type: http
+  seq: 5
+
+http:
+  method: GET
+  url: "{{baseUrl}}/booking/{{bookingId}}"
+  headers:
+    - name: Cookie
+      value: token={{token}}
+    - name: Accept
+      value: application/json
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        tests :{
+          test("Status code should be 200", function() {
+            expect(res.getStatus()).to.equal(200);
+          });
+
+          test("Firstname should exist and not be empty",   function() {
+            const body = res.getBody();
+
+            expect(body.firstname).to.exist;
+            expect(body.firstname).to.not.equal("");
+          });
+          
+          test("Response data types are correct", 
+               function() {
+          const body = res.getBody();
+
+          expect(body.firstname).to.be.a("string");
+          expect(body.lastname).to.be.a("string");
+          expect(body.totalprice).to.be.a("number");
+          expect(body.depositpaid).to.be.a("boolean");
+          });
+          
+          test("Checkout date should be after checkin date", function() {
+          const body = res.getBody();
+
+          const checkin = new Date(body.bookingdates.checkin);
+          const checkout = new Date(body.bookingdates.checkout);
+
+          expect(checkout.getTime()).to.be.greaterThan(checkin.getTime());
+        });
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

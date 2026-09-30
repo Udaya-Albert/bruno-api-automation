@@ -1,0 +1,29 @@
+info:
+  name: Invalid Booking
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{baseUrl}}/booking/999999"
+  headers:
+    - name: Cookie
+      value: token={{token}}
+    - name: Accept
+      value: application/json
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Invalid booking should return 404", function() {
+          expect(res.getStatus()).to.equal(404);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

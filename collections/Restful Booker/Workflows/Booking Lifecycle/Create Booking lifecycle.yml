@@ -1,0 +1,44 @@
+info:
+  name: Create Booking lifecycle
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/booking"
+  headers:
+    - name: Content-Type
+      value: application/json
+    - name: Accept
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "firstname": "Udaya",
+        "lastname": "TestQA",
+        "totalprice": 500,
+        "depositpaid": true,
+        "bookingdates": {
+          "checkin": "2026-10-01",
+          "checkout": "2026-10-10"
+        },
+        "additionalneeds": "Breakfast"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const data = res.getBody();
+        expect(data.bookingid).to.exist;
+
+        bru.setVar("bookingId", data.bookingid);
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

@@ -1,0 +1,7 @@
+info:
+  name: Booking Workflow 2
+  type: folder
+  seq: 2
+
+request:
+  auth: inherit

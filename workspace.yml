@@ -1,0 +1,12 @@
+opencollection: 1.0.0
+info:
+  name: "Bruno - API Practice"
+  type: workspace
+
+collections:
+  - name: "Restful Booker"
+    path: "collections/Restful Booker"
+
+specs:
+
+docs: ''
